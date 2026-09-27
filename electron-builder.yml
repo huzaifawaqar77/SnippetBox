@@ -1,0 +1,68 @@
+appId: com.snippetbox.app
+productName: SnippetBox
+copyright: SnippetBox
+directories:
+  buildResources: build
+  output: dist
+files:
+  - out/**/*
+  - package.json
+  - '!**/*.map'
+  - '!**/{.eslintrc,.editorconfig,.prettierrc,tsconfig*.json}'
+asarUnpack:
+  - '**/*.node'
+  - resources/**
+extraResources:
+  - from: build/icon.png
+    to: icon.png
+  - from: README.md
+    to: README.md
+extraMetadata:
+  main: out/main/index.js
+linux:
+  target:
+    - AppImage
+    - deb
+  category: Development
+  icon: build/icons
+  # Pairs with "desktopName" in package.json so the desktop environment can
+  # associate the running window with this entry (dock icon, taskbar grouping).
+  syncDesktopName: true
+  # dpkg requires a maintainer.
+  maintainer: Huzaifa Waqar <huzaifawaqar77@gmail.com>
+  synopsis: Local-first developer knowledge base
+  description: >-
+    SnippetBox is a local-first developer knowledge base for saving solutions, code
+    snippets, commands, configurations and technical notes. Everything is stored on
+    your machine and stays fully offline.
+  desktop:
+    entry:
+      Keywords: snippet;code;developer;knowledge;
+      Categories: Development;Utility;
+npmRebuild: false
+
+# ---------------------------------------------------------------------------
+# Snap Store packaging (this is also what Ubuntu's App Center serves).
+#
+# Built on request only — `npm run dist:snap` — because electron-builder shells
+# out to the `snapcraft` CLI, which is not installed everywhere. Keeping it out
+# of the default target list means `npm run dist` still works without it.
+#
+# `classic` confinement is a deliberate choice. Under the default `strict`
+# confinement a snap only sees its own private directories, so an existing
+# library at ~/.local/share/snippetbox would be invisible and the app would
+# appear empty to anyone moving from the .deb or AppImage. Classic gives exactly
+# the same behaviour and file layout as the .deb. The trade-off: classic snaps
+# require manual review by the Snap Store team before the first release.
+snap:
+  confinement: classic
+  grade: stable
+  title: SnippetBox
+  summary: Local-first developer knowledge base
+  description: |
+    SnippetBox keeps the code, commands, configurations and notes you find while
+    working, so you never have to solve the same problem twice.
+
+    Everything is stored locally on your machine. There is no account, no
+    synchronization and no server, and the app works fully offline.
+  category: Development

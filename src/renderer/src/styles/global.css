@@ -1,0 +1,494 @@
+@import 'tailwindcss';
+
+/* Class-based theming: the theme lives on <html>, so both explicit choices and
+   the 'system' setting resolve through one code path. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+   Semantic design tokens (section 66 of the product spec).
+   Light and dark are designed separately — dark is not an inversion.
+--------------------------------------------------------------------------- */
+:root {
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-sunken: #f7f8fa;
+  --surface-hover: #f1f3f7;
+  --surface-active: #e7eaf0;
+  --surface-overlay: #ffffff;
+  --border: #e5e8ee;
+  --border-strong: #d2d7e0;
+  --text: #0f172a;
+  --text-secondary: #3f4a5c;
+  --text-muted: #64748b;
+  --text-subtle: #94a3b8;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-soft: #eef1ff;
+  --primary-border: #c7cdfb;
+  --on-primary: #ffffff;
+  --danger: #dc2626;
+  --danger-soft: #fef2f2;
+  --danger-border: #fecaca;
+  --success: #15803d;
+  --success-soft: #f0fdf4;
+  --warning: #b45309;
+  --warning-soft: #fffbeb;
+  --focus: #6366f1;
+  --code-surface: #fbfcfe;
+  --code-gutter: #f5f6f9;
+  --selection: #dbe2ff;
+  --cursor: #4f46e5;
+  --shadow: 220 20% 30%;
+  --star: #f59e0b;
+
+  /* CodeMirror syntax palette — light.
+     Every token clears the 4.5:1 WCAG AA floor against --code-surface; the
+     values here are measured, not eyeballed (see the note in the README). */
+  --cm-comment: #5b6a7d;
+  --cm-keyword: #9333ea;
+  --cm-string: #15803d;
+  --cm-number: #c2410c;
+  --cm-bool: #c2410c;
+  --cm-function: #2563eb;
+  --cm-variable: #0f172a;
+  --cm-type: #0e7490;
+  --cm-class: #0e7490;
+  --cm-property: #db2777;
+  --cm-tag: #dc2626;
+  --cm-attribute: #b45309;
+  --cm-operator: #475569;
+  --cm-punctuation: #64748b;
+  --cm-heading: #2563eb;
+  --cm-link: #2563eb;
+  --cm-meta: #7c3aed;
+  --cm-invalid: #dc2626;
+  --cm-atom: #c2410c;
+
+  --ui-font-size: 18px;
+  --code-font-size: 14px;
+  /* Zoom ratio, derived from --ui-font-size. Panel widths multiply by it so the
+     three-pane layout stays proportional at every zoom level. */
+  --zoom: 1;
+  --ui-font: 'Inter', 'Inter var', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --code-font: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Source Code Pro', ui-monospace, 'SF Mono', Menlo,
+    'DejaVu Sans Mono', monospace;
+}
+
+.dark {
+  --surface: #0b0f16;
+  --surface-raised: #121823;
+  --surface-sunken: #070a10;
+  --surface-hover: #18202d;
+  --surface-active: #1f2937;
+  --surface-overlay: #131a25;
+  --border: #1f2836;
+  --border-strong: #2c3748;
+  --text: #e8edf5;
+  --text-secondary: #c3ccda;
+  --text-muted: #8f9db2;
+  --text-subtle: #6b7a90;
+  --primary: #6366f1;
+  --primary-hover: #818cf8;
+  --primary-soft: #1a2038;
+  --primary-border: #333c63;
+  --on-primary: #ffffff;
+  --danger: #f87171;
+  --danger-soft: #2a1416;
+  --danger-border: #63262a;
+  --success: #4ade80;
+  --success-soft: #0f2417;
+  --warning: #fbbf24;
+  --warning-soft: #2a1f0a;
+  --focus: #818cf8;
+  --code-surface: #0c1119;
+  --code-gutter: #0a0e15;
+  --selection: #2b3a63;
+  --cursor: #818cf8;
+  --shadow: 220 60% 2%;
+  --star: #fbbf24;
+
+  /* CodeMirror syntax palette — dark.
+     Comments, brackets and operators were too dim to read comfortably against
+     --code-surface (3.5:1, 4.3:1); they are raised to 5.7:1 and 6.4:1. Booleans
+     and atoms also get their own hue instead of sharing the number colour. */
+  --cm-comment: #7e8ea5;
+  --cm-keyword: #c792ea;
+  --cm-string: #8ce39c;
+  --cm-number: #f0a868;
+  --cm-bool: #f2a6c0;
+  --cm-function: #82aaff;
+  --cm-variable: #d7dee9;
+  --cm-type: #7fdbca;
+  --cm-class: #7fdbca;
+  --cm-property: #e2a3c0;
+  --cm-tag: #ff8a80;
+  --cm-attribute: #ffd580;
+  --cm-operator: #a6b3c6;
+  --cm-punctuation: #8797ac;
+  --cm-heading: #82aaff;
+  --cm-link: #82aaff;
+  --cm-meta: #c792ea;
+  --cm-invalid: #ff8a80;
+  --cm-atom: #f2a6c0;
+}
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-raised: var(--surface-raised);
+  --color-sunken: var(--surface-sunken);
+  --color-hover: var(--surface-hover);
+  --color-active: var(--surface-active);
+  --color-overlay: var(--surface-overlay);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-fg: var(--text);
+  --color-fg-secondary: var(--text-secondary);
+  --color-muted: var(--text-muted);
+  --color-subtle: var(--text-subtle);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-border: var(--primary-border);
+  --color-on-primary: var(--on-primary);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-border: var(--danger-border);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-focus: var(--focus);
+  --color-code: var(--code-surface);
+  --color-star: var(--star);
+
+  --font-sans: var(--ui-font);
+  --font-mono: var(--code-font);
+
+  /* Type scale is expressed in rem so it scales with --ui-font-size, exactly
+     like Tailwind's rem-based spacing. That is what makes zoom affect the whole
+     interface uniformly instead of only the gaps. Ratios match the original
+     14px-root design, so 18px is simply the whole scale one step larger. */
+  --text-2xs: 0.79rem;
+  --text-2xs--line-height: 1.45;
+  --text-xs: 0.86rem;
+  --text-xs--line-height: 1.42;
+  --text-sm: 0.93rem;
+  --text-sm--line-height: 1.46;
+  --text-base: 1rem;
+  --text-base--line-height: 1.5;
+  --text-md: 1.07rem;
+  --text-md--line-height: 1.53;
+  --text-lg: 1.21rem;
+  --text-lg--line-height: 1.47;
+  --text-xl: 1.43rem;
+  --text-xl--line-height: 1.4;
+  --text-2xl: 1.71rem;
+  --text-2xl--line-height: 1.33;
+  --text-3xl: 2.29rem;
+  --text-3xl--line-height: 1.25;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --shadow-sm: 0 1px 2px 0 hsl(var(--shadow) / 0.06);
+  --shadow-md: 0 4px 12px -2px hsl(var(--shadow) / 0.12), 0 1px 3px -1px hsl(var(--shadow) / 0.08);
+  --shadow-lg: 0 16px 40px -12px hsl(var(--shadow) / 0.28), 0 4px 12px -4px hsl(var(--shadow) / 0.12);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------- */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    border-color: var(--border);
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  html {
+    font-size: var(--ui-font-size);
+  }
+
+  body {
+    margin: 0;
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--ui-font);
+    font-size: 1rem;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  /* Text that represents user content must always be selectable. */
+  input,
+  textarea,
+  [contenteditable],
+  [data-selectable] {
+    user-select: text;
+  }
+
+  ::selection {
+    background: var(--selection);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--text-subtle) 45%, transparent);
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklab, var(--text-muted) 70%, transparent);
+    background-clip: padding-box;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
+@layer components {
+  /* Compact mode tightens vertical rhythm for power users (section 34). */
+  [data-density='compact'] {
+    --compact-row: 1;
+  }
+
+  [data-density='compact'] .density-row {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+
+  [data-density='compact'] .density-gap {
+    gap: 4px;
+  }
+
+  .drag-region {
+    -webkit-app-region: drag;
+  }
+
+  .no-drag {
+    -webkit-app-region: no-drag;
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .animate-in-up {
+    animation: in-up 180ms var(--ease-out) both;
+  }
+
+  .animate-in-fade {
+    animation: in-fade 140ms ease-out both;
+  }
+
+  .animate-in-scale {
+    animation: in-scale 160ms var(--ease-out) both;
+  }
+}
+
+@keyframes in-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes in-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes in-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Animations are off when the user disables them, or prefers reduced motion. */
+[data-animations='off'] *,
+[data-animations='off'] *::before,
+[data-animations='off'] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   CodeMirror is styled by a real CM theme in src/renderer/src/lib/codemirror.ts.
+
+   It cannot live here: CodeMirror injects its own base theme into the document
+   after this stylesheet, so equal-specificity .cm-* rules here lose — which is
+   what made the line-number gutter render light grey on the dark theme.
+--------------------------------------------------------------------------- */
+
+/* Markdown notes rendering */
+.notes-prose {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.notes-prose > * + * {
+  margin-top: 0.75rem;
+}
+
+.notes-prose h1,
+.notes-prose h2,
+.notes-prose h3 {
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 1.25rem;
+}
+
+.notes-prose h1:first-child,
+.notes-prose h2:first-child,
+.notes-prose h3:first-child {
+  margin-top: 0;
+}
+
+.notes-prose a {
+  color: var(--primary);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in oklab, var(--primary) 35%, transparent);
+}
+
+.notes-prose a:hover {
+  border-bottom-color: var(--primary);
+}
+
+.notes-prose code {
+  font-family: var(--code-font);
+  font-size: 0.85em;
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  padding: 1px 5px;
+}
+
+.notes-prose pre {
+  background: var(--code-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  overflow-x: auto;
+}
+
+.notes-prose pre code {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.notes-prose ul,
+.notes-prose ol {
+  padding-left: 1.25rem;
+}
+
+.notes-prose ul {
+  list-style: disc;
+}
+
+.notes-prose ol {
+  list-style: decimal;
+}
+
+.notes-prose li + li {
+  margin-top: 0.25rem;
+}
+
+.notes-prose blockquote {
+  border-left: 3px solid var(--primary-border);
+  padding-left: 0.875rem;
+  color: var(--text-muted);
+}
+
+.notes-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.notes-prose th,
+.notes-prose td {
+  border: 1px solid var(--border);
+  padding: 5px 9px;
+  text-align: left;
+}
+
+.notes-prose th {
+  background: var(--surface-sunken);
+  font-weight: 600;
+}
+
+.notes-prose hr {
+  border: none;
+  border-top: 1px solid var(--border);
+}
