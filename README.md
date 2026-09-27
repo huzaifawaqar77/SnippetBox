@@ -10,6 +10,24 @@ There is no account, no sync and no server. Everything lives on your machine and
 
 ---
 
+## Download
+
+Prebuilt Linux packages are attached to every
+[release](https://github.com/huzaifawaqar77/SnippetBox/releases/latest):
+
+| File | Notes |
+| --- | --- |
+| `snippetbox_<version>_amd64.deb` | **Recommended** — installs to `/opt` and adds a desktop entry |
+| `SnippetBox-<version>.AppImage` | Portable, no installation required |
+| `SHA256SUMS` | Checksums — verify with `sha256sum -c SHA256SUMS` |
+
+All artifacts are `x86_64`. See [Installing](#installing) for the details, including why the `.deb`
+is the recommended route.
+
+To build and run from a checkout instead, jump to [Getting started](#getting-started).
+
+---
+
 ## What it does
 
 **Capture → organise → search → understand → copy.** Everything else supports that loop.
@@ -383,4 +401,6 @@ Nothing in this app is a mocked-up button. Features that exist work; these do no
 
 ## License
 
-MIT.
+MIT — see [LICENSE](LICENSE).
+
+Built and maintained by **Huzaifa Waqar** · [huzaifawaqar77@gmail.com](mailto:huzaifawaqar77@gmail.com)
