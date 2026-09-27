@@ -8,7 +8,14 @@
     "name": "Huzaifa Waqar",
     "email": "huzaifawaqar77@gmail.com"
   },
-  "homepage": "https://example.invalid/snippetbox",
+  "homepage": "https://github.com/huzaifawaqar77/SnippetBox#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/huzaifawaqar77/SnippetBox.git"
+  },
+  "bugs": {
+    "url": "https://github.com/huzaifawaqar77/SnippetBox/issues"
+  },
   "desktopName": "snippetbox.desktop",
   "main": "./out/main/index.js",
   "engines": {
